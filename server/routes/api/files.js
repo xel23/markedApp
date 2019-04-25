@@ -30,7 +30,7 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   const file = await loadFiles();
   const newvalues = { $set: {name: req.body.name, age: req.body.age } };
-  file.updateOne({ _id: new mongodb.ObjectID(req.params.id) }, newvalues)
+  await file.updateOne({ _id: new mongodb.ObjectID(req.params.id) }, newvalues)
     .then(() => {
       res.json({
         status: 'updated'
