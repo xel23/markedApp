@@ -17,13 +17,14 @@
         <ul class="list-group">
           <li v-for="file in files" class="list-group-item">{{ file.date }}
           <br><button class="btn btn-danger mr-2" @click="deleteFile" :id="file._id">Delete</button>
-              <button class="btn btn-primary" @click="openFile">Open</button></li>
+              <button class="btn btn-primary" @click="openFile" :id="file._id">Open</button></li>
         </ul>
       </div>
     </div>
     <div class="row mt-2">
       <div class="col">
-        <button class="btn btn-success" @click="postFile">Save</button>
+        <button v-if="su == 'Save'" class="btn btn-success" @click="postFile">{{ su }}</button>
+        <button v-else class="btn btn-success" @click="updateFile">{{ su }}</button>
       </div>
     </div>
   </div>
@@ -37,10 +38,13 @@
     data () {
       return {
         file: {
+          name: 'Name',
           text: '# hello',
           date: new Date()
         },
         files: [],
+        su: 'Save',
+        curID: ''
       }
     },
     created () {
@@ -78,6 +82,22 @@
           })
           .catch(err => console.error(err));
       },
+      updateFile(e) {
+        fetch(`http://localhost:3000/api/files/${this.curID}`, {
+          method: 'PUT',
+          body: JSON.stringify(this.file),
+          headers: {
+            'Accept': 'application/json',
+            'Content-type': 'application/json'
+          }
+        })
+          .then(res => res.json())
+          .then(data => {
+            console.log(data);
+            this.getList();
+          })
+          .catch(err => console.error(err));
+      },
       deleteFile(e) {
         fetch(`http://localhost:3000/api/files/${e.target.id}`, {
           method: 'DELETE'
@@ -89,8 +109,14 @@
           })
           .catch(err => console.error(err));
       },
-      openFile() {
-
+      openFile(e) {
+        fetch(`http://localhost:3000/api/files/${e.target.id}`)
+          .then(res => res.json())
+          .then(data => {
+            this.file.text = data[0].text;
+            this.su = 'Update';
+            this.curID = data[0]._id;
+          })
       }
     }
   }
