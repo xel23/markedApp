@@ -1,39 +1,46 @@
 <template>
-  <div class="container-fluid mt-5" id="app">
-    <div class="row">
-      <div class="col-5 m-auto">
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <span class="input-group-text">Input text</span>
-          </div>
-          <textarea class="form-control" aria-label="With textarea" rows="14" v-model="file.text"
-                    ></textarea>
-        </div>
-      </div>
-      <div class="col-5">
-        <div class="pre-scrollable" v-html="compiledMarkdown"></div>
-      </div>
-      <div class="col-2 m-auto">
-        <ul class="list-group">
-          <li v-for="file in files" class="list-group-item">{{ file.name }}
-          <br><button class="btn btn-danger mr-2" @click="deleteFile" :id="file._id">Delete</button>
-              <button class="btn btn-primary" @click="openFile" :id="file._id">Open</button></li>
-        </ul>
-      </div>
+  <div>
+    <div class="container-fluid pl-0 pr-0">
+      <nav class="navbar navbar-dark bg-dark">
+        <a class="navbar-brand" href="/">Lab5</a>
+      </nav>
     </div>
-    <div class="row mt-2">
-      <div class="col-4">
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon1">Name</span>
+    <div class="container-fluid mt-5" id="app">
+      <div class="row">
+        <div class="col-5 m-auto">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Input text</span>
+            </div>
+            <textarea class="form-control" aria-label="With textarea" rows="14" v-model="file.text"
+            ></textarea>
           </div>
-          <input type="text" class="form-control" :placeholder="file.name" v-model="file.name"
-                 aria-label="Username" aria-describedby="basic-addon1">
+        </div>
+        <div class="col-5">
+          <div class="pre-scrollable" v-html="compiledMarkdown"></div>
+        </div>
+        <div class="col-2 m-auto">
+          <ul class="list-group">
+            <li v-for="file in files" class="list-group-item">{{ file.name }}
+              <br><button class="btn btn-danger mr-2" @click="deleteFile" :id="file._id">Delete</button>
+              <button class="btn btn-primary" @click="openFile" :id="file._id">Open</button></li>
+          </ul>
         </div>
       </div>
-      <div class="col-1">
-        <button v-if="su == 'Save'" class="btn btn-success" @click="postFile">{{ su }}</button>
-        <button v-else class="btn btn-success" @click="updateFile">{{ su }}</button>
+      <div class="row mt-2">
+        <div class="col-4">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon1">Name</span>
+            </div>
+            <input type="text" class="form-control" :placeholder="file.name" v-model="file.name"
+                   aria-label="Username" aria-describedby="basic-addon1">
+          </div>
+        </div>
+        <div class="col-1">
+          <button v-if="su == 'Save'" class="btn btn-success" @click="postFile">{{ su }}</button>
+          <button v-else class="btn btn-success" @click="updateFile">{{ su }}</button>
+        </div>
       </div>
     </div>
   </div>
