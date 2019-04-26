@@ -7,21 +7,16 @@
             <span class="input-group-text">Input text</span>
           </div>
           <textarea class="form-control" aria-label="With textarea" rows="35" v-model="file.text"
-                    @input="updateOut"></textarea>
+                    ></textarea>
         </div>
       </div>
-      <div class="col-5 m-auto">
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <span class="input-group-text">Output text</span>
-          </div>
-          <textarea class="form-control" aria-label="With textarea" rows="35" v-model="output"></textarea>
-        </div>
+      <div class="col-5">
+        <div class="pre-scrollable" v-html="compiledMarkdown"></div>
       </div>
       <div class="col-2 m-auto">
         <ul class="list-group">
           <li v-for="file in files" class="list-group-item">{{ file.date }}
-          <br><button class="btn btn-danger mr-2" @click="deleteFile">Delete</button>
+          <br><button class="btn btn-danger mr-2" @click="deleteFile" :id="file._id">Delete</button>
               <button class="btn btn-primary" @click="openFile">Open</button></li>
         </ul>
       </div>
@@ -36,19 +31,25 @@
 
 <script>
 
+  const marked = require('marked');
+
   export default {
     data () {
       return {
         file: {
-          text: '',
+          text: '# hello',
           date: new Date()
         },
         files: [],
-        output: ''
       }
     },
     created () {
       this.getList();
+    },
+    computed: {
+      compiledMarkdown() {
+        return marked(this.file.text, { sanitize: true });
+      }
     },
     methods: {
       getList() {
@@ -56,7 +57,6 @@
           .then(res => res.json())
           .then(data => {
             this.files = data;
-            console.log(this.files);
           })
           .catch(err => {
             console.error(err);
@@ -72,18 +72,25 @@
           }
         })
           .then(res => res.json())
-          .then(data => console.log(data))
+          .then(data => {
+            console.log(data);
+            this.getList();
+          })
           .catch(err => console.error(err));
-        this.getList();
       },
-      deleteFile() {
-
+      deleteFile(e) {
+        fetch(`http://localhost:3000/api/files/${e.target.id}`, {
+          method: 'DELETE'
+        })
+          .then(res => res.json())
+          .then(data => {
+            console.log(data);
+            this.getList();
+          })
+          .catch(err => console.error(err));
       },
       openFile() {
 
-      },
-      updateOut(e) {
-        this.output = e.target.value;
       }
     }
   }
