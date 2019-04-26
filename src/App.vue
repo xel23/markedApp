@@ -6,7 +6,7 @@
           <div class="input-group-prepend">
             <span class="input-group-text">Input text</span>
           </div>
-          <textarea class="form-control" aria-label="With textarea" rows="35" v-model="file.text"
+          <textarea class="form-control" aria-label="With textarea" rows="14" v-model="file.text"
                     ></textarea>
         </div>
       </div>
@@ -15,14 +15,23 @@
       </div>
       <div class="col-2 m-auto">
         <ul class="list-group">
-          <li v-for="file in files" class="list-group-item">{{ file.date }}
+          <li v-for="file in files" class="list-group-item">{{ file.name }}
           <br><button class="btn btn-danger mr-2" @click="deleteFile" :id="file._id">Delete</button>
               <button class="btn btn-primary" @click="openFile" :id="file._id">Open</button></li>
         </ul>
       </div>
     </div>
     <div class="row mt-2">
-      <div class="col">
+      <div class="col-4">
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">Name</span>
+          </div>
+          <input type="text" class="form-control" :placeholder="file.name" v-model="file.name"
+                 aria-label="Username" aria-describedby="basic-addon1">
+        </div>
+      </div>
+      <div class="col-1">
         <button v-if="su == 'Save'" class="btn btn-success" @click="postFile">{{ su }}</button>
         <button v-else class="btn btn-success" @click="updateFile">{{ su }}</button>
       </div>
@@ -104,7 +113,10 @@
         })
           .then(res => res.json())
           .then(data => {
-            console.log(data);
+            this.file.name = 'Name';
+            this.file.text = '# hello';
+            this.su = 'Save';
+            this.curID = '';
             this.getList();
           })
           .catch(err => console.error(err));
@@ -114,77 +126,11 @@
           .then(res => res.json())
           .then(data => {
             this.file.text = data[0].text;
+            this.file.name = data[0].name;
             this.su = 'Update';
             this.curID = data[0]._id;
           })
       }
     }
   }
-
-
-
-
-
-
-
-
-
-
-
-
-  //   import axios from 'axios';
-//
-//   const url = 'http://localhost:3000/api/files/';
-//
-//   class MD {
-//     static getAllFiles() {
-//       return new Promise(async (resolve, reject) => {
-//         try {
-//           const res = await axios.get(url);
-//           const data = res.data;
-//           resolve(data.map(file => {
-//
-//           }))
-//         } catch (err) {
-//
-//         }
-//       })
-//     }
-//   }
-//
-// export default {
-//   data () {
-//     return {
-//       msg: 'Welcome to Your Vue.js App',
-//       input: '# hello',
-//       test: '1'
-//     }
-//   },
-//   computed: {
-//     compiledMarkdown: () => {
-//       // alert('comp' + this.input);
-//       return this.test;
-//     }
-//   },
-//   methods: {
-//     update: (e) => {
-//       // alert(e.target.value);
-//       this.test = e.target.value;
-//     },
-//     save: () => {
-//       const file = {
-//         text: 'text'
-//       };
-//       // axios.post(url, file).then(response => {
-//       //   console.log(response);
-//       // })
-//
-//       alert(axios.get(url));
-//     }
-//   }
-// }
 </script>
-
-<style>
-
-</style>
