@@ -19,7 +19,7 @@
         <div class="col-5">
           <div class="pre-scrollable" v-html="compiledMarkdown"></div>
         </div>
-        <div class="col-2 m-auto">
+        <div class="col-2 pre-scrollable">
           <ul class="list-group">
             <li v-for="file in files" class="list-group-item">{{ file.name }}
               <br><button class="btn btn-danger mr-2" @click="deleteFile" :id="file._id">Delete</button>
